@@ -1,0 +1,10 @@
+:root {
+  --font-heading: "Fragment Mono", monospace;
+  --font-text: "Open Sans", sans-serif;
+
+  --accent-colour: #3f764c;
+  --text-colour: #271918;
+  --accent-secondary: #a3b1ff;
+
+  background-color: #fffcf7;
+}
