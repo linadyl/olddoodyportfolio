@@ -23,6 +23,8 @@ function App() {
             <div className='tagline-container'>
                 <p>hi! my name is <span style={{ color:'var(--accent-colour)'}}>lina</span> and i'm an (aspiring) <span style={{ color:'var(--accent-colour)'}}>ux/product engineer 🥸</span></p>
             </div>
+
+            <p>hello!</p>
         </div>
 
     </div>
