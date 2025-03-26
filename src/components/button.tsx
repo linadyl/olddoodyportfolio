@@ -1,4 +1,5 @@
 import React from 'react';
+import '../index.css';
 
 interface FragmentMonoButtonProps {
     text?: string;
@@ -15,7 +16,8 @@ const FragmentMonoButton: React.FC<FragmentMonoButtonProps> = ({ text = "about m
         letterSpacing: "0.05em",
         borderColor: "var(--accent-colour)",
         color: "var(--accent-colour)",
-        backgroundColor: "var(--background-colour)"
+        backgroundColor: "var(--background-colour)",
+        opacity: 1
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "var(--accent-secondary)";

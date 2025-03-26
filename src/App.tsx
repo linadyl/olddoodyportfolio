@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import logo from './assets/logo.svg'
-import CustomCursor from './customCursor'
+import CustomCursor from './components/customCursor.tsx'
 import card1 from './assets/cards/card1.png'
 import card2 from './assets/cards/card2.png'
 import card3 from './assets/cards/card3.png'
 import './App.css'
-import './button.tsx'
-import FragmentMonoButton from './button.tsx'
-import WigglingAsciiBackground from './asciiart.tsx'
-import TypewriterText from "./typewriter.tsx";
+import './components/button.tsx'
+import FragmentMonoButton from './components/button.tsx'
+import WigglingAsciiBackground from './components/asciiart.tsx'
+import TypewriterText from "./components/typewriter.tsx";
 
 function App() {
 
@@ -46,21 +46,15 @@ function App() {
             <div className='flex justify-around px-4 md:px-6 lg:px-8 mt-[25vh] mb-[25vh]'>
                 <div className='mx-s md:mx-4'>
                     <img src={card1} alt="card image for works" />
-                    <div className='mt-6'>
-                        <FragmentMonoButton text="works"/>
-                    </div>
+                    <FragmentMonoButton text="works"/>
                 </div>
                 <div className='mx-s md:mx-4'>
                     <img src={card2} alt="card image for playground" />
-                    <div className='mt-6'>
-                        <FragmentMonoButton text="playground"/>
-                    </div>
+                    <FragmentMonoButton text="playground"/>
                 </div>
                 <div className='mx-s md:mx-4'>
                     <img src={card3} alt="card image for guestbook" />
-                    <div className='mt-6'>
-                        <FragmentMonoButton text="guestbook"/>
-                    </div>
+                    <FragmentMonoButton text="guestbook"/>
                 </div>
             </div>
 

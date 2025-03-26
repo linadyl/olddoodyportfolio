@@ -6,5 +6,7 @@
   --text-colour: #271918;
   --accent-secondary: #a3b1ff;
 
-  background-color: #fffcf7;
+  --background-colour: #fffcf7;
+
+  background-color: var(--background-colour);
 }
