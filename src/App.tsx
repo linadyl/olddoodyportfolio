@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react'
+import { useState } from 'react'
 import logo from './assets/logo.svg'
 import CustomCursor from './customCursor'
 import card1 from './assets/cards/card1.png'
