@@ -13,7 +13,6 @@ import TypewriterText from "./typewriter.tsx";
 function App() {
 
     const [isRotating, setIsRotating] = useState(false);
-    const [isGuestbookOpen, setIsGuestbookOpen] = useState(false);
 
   return (
     <div className='main'>
