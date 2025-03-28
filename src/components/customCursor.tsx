@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./customCursor.css";
+import "../styles/customCursor.css";
 import cursorSvg from "../assets/cursor.svg";
 
 interface CursorPosition {
