@@ -1,19 +1,10 @@
 [build]
 command = "npm run build"
-node_compat = true
-node_version = "20.10.0"
 
 [build.environment]
 NODE_VERSION = "20.10.0"
 
-[build.processing]
-skip_processing = false
+pages_build_output_dir = ".next"
 
 [site]
 bucket = "./out"
-
-[pages_build_output_dir]
-value = ".next"
-
-[[build.upload]]
-format = "service-worker"
