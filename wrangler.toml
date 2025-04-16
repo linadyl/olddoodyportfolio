@@ -1,19 +1,15 @@
-name = "lina-portfolio"
+name = "portfolio-v2"
+main = "./.next/standalone/server.js"
 compatibility_date = "2023-05-07"
-compatibility_flags = ["nodejs_compat"]
 
-# Configuration for Cloudflare Pages
 [build]
 command = "npm run build"
-output_directory = ".next"
-base_directory = ""
 
-# Environment variables
+[site]
+bucket = "./.next/static"
+
 [env.production]
 NODE_ENV = "production"
 
 [env.preview]
 NODE_ENV = "production"
-
-[site]
-bucket = ".next/static"
