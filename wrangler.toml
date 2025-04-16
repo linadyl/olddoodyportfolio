@@ -1,16 +1,19 @@
-name = "lina-portfolio"
-compatibility_date = "2023-05-07"
-compatibility_flags = ["nodejs_compat"]
-
 [build]
 command = "npm run build"
-output_directory = ".next"
+node_compat = true
+node_version = "20.10.0"
 
-[env.production]
-NODE_ENV = "production"
+[build.environment]
+NODE_VERSION = "20.10.0"
 
-[env.preview]
-NODE_ENV = "production"
+[build.processing]
+skip_processing = false
 
 [site]
-bucket = ".next"
+bucket = "./out"
+
+[pages_build_output_dir]
+value = ".next"
+
+[[build.upload]]
+format = "service-worker"
