@@ -1,10 +1,7 @@
+name = "portfolio-site"
+
 [build]
 command = "npm run build"
 
-[build.environment]
-NODE_VERSION = "20.10.0"
-
+# Simplified structure
 pages_build_output_dir = ".next"
-
-[site]
-bucket = "./out"
