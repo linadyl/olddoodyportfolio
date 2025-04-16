@@ -1,11 +1,14 @@
-import type { NextConfig } from 'next';
+import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
-  
+  output: 'export',
+  distDir: 'dist',
   images: {
     unoptimized: true,
+  },
+  experimental: {
+    optimizePackageImports: ["motion"]
   },
 };
 
