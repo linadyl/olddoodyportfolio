@@ -85,7 +85,7 @@ export default function Home() {
       <CustomCursor />
       <Header />
       <div className="font-mono p-44 w-3/5 text-[50px] leading-[119.958%] tracking-[-3.5px] text-foreground">
-        ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i'm a <span className="text-3xl -ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
+        ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i&apos;m a <span className="text-3xl -ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
         <div className="mt-2 text-[25px]">
           <TypewriterText text="↪ studying interactive media @ sheridan college 🥸" />
         </div>

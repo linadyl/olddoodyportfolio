@@ -27,6 +27,8 @@ interface AnimatedBookProps {
 
 const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = [] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Create controls outside of the mapping function - one for each sticker
+  const stickerControls = stickers.map(() => useAnimationControls());
 
   const bookVariants: Variants = {
     offscreen: {
@@ -86,67 +88,63 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
             className="w-full"
           />
           
-          {stickers.map((sticker, index) => {
-            const controls = useAnimationControls();
-            
-            return (
-              <motion.div
-                key={sticker.id}
-                className="absolute cursor-pointer"
-                style={{
-                  top: sticker.position.top,
-                  left: sticker.position.left,
-                  zIndex: 10,
-                  cursor: "none",
-                }}
-                variants={stickerVariants}
-                custom={index}
-                initial="offscreen"
-                animate={controls}
-                onViewportEnter={() => {
-                  controls.start({
-                    y: 0,
-                    opacity: 1,
-                    scale: 1,
-                    rotate: index % 2 === 0 ? 8 : -8,
-                    transition: {
-                      duration: 0.5,
-                      ease: "easeOut",
-                      delay: 0.7 + (index * 0.08),
-                    }
-                  });
-                }}
-                whileHover={{
-                  scale: 1.05,
-                  rotate: 0,
-                  zIndex: 20,
+          {stickers.map((sticker, index) => (
+            <motion.div
+              key={sticker.id}
+              className="absolute cursor-pointer"
+              style={{
+                top: sticker.position.top,
+                left: sticker.position.left,
+                zIndex: 10,
+                cursor: "none",
+              }}
+              variants={stickerVariants}
+              custom={index}
+              initial="offscreen"
+              animate={stickerControls[index]}
+              onViewportEnter={() => {
+                stickerControls[index].start({
+                  y: 0,
+                  opacity: 1,
+                  scale: 1,
+                  rotate: index % 2 === 0 ? 8 : -8,
                   transition: {
-                    duration: 0.1,
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: 0.7 + (index * 0.08),
+                  }
+                });
+              }}
+              whileHover={{
+                scale: 1.05,
+                rotate: 0,
+                zIndex: 20,
+                transition: {
+                  duration: 0.1,
+                  ease: "easeOut"
+                }
+              }}
+              onHoverEnd={() => {
+                stickerControls[index].start({
+                  scale: 1,
+                  rotate: index % 2 === 0 ? 8 : -8,
+                  zIndex: 10,
+                  transition: {
+                    duration: 0.05,
                     ease: "easeOut"
                   }
-                }}
-                onHoverEnd={() => {
-                  controls.start({
-                    scale: 1,
-                    rotate: index % 2 === 0 ? 8 : -8,
-                    zIndex: 10,
-                    transition: {
-                      duration: 0.05,
-                      ease: "easeOut"
-                    }
-                  });
-                }}
-              >
-                <Image
-                  src={sticker.src}
-                  alt={sticker.alt}
-                  width={sticker.size.width}
-                  height={sticker.size.height}
-                  className="drop-shadow-md"
-                />
-              </motion.div>
-            );
-          })}
+                });
+              }}
+            >
+              <Image
+                src={sticker.src}
+                alt={sticker.alt}
+                width={sticker.size.width}
+                height={sticker.size.height}
+                className="drop-shadow-md"
+              />
+            </motion.div>
+          ))}
         </motion.div>
       </motion.div>
     </div>
