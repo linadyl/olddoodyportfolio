@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Header from '@/components/Header';
 import CustomCursor from "@/components/cursor";
 import AnimatedBook from "@/components/AnimatedBook";

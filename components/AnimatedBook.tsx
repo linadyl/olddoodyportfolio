@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, Variants, useAnimationControls } from "motion/react";
+import { motion, Variants } from "motion/react";
 
 interface StickerType {
   id: string;
@@ -27,8 +27,43 @@ interface AnimatedBookProps {
 
 const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = [] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Create controls outside of the mapping function - one for each sticker
-  const stickerControls = stickers.map(() => useAnimationControls());
+  // Use state to track hover and animation states instead of animation controls
+  const [animatedStickers, setAnimatedStickers] = useState<boolean[]>(Array(stickers.length).fill(false));
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
+  // Handle animation entry
+  useEffect(() => {
+    // Create a ref to the current container element
+    const currentContainer = containerRef.current;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          // Animate stickers in sequence
+          stickers.forEach((_, index) => {
+            setTimeout(() => {
+              setAnimatedStickers(prev => {
+                const newState = [...prev];
+                newState[index] = true;
+                return newState;
+              });
+            }, 700 + (index * 80));
+          });
+        }
+      },
+      { threshold: 0.5 }
+    );
+    
+    if (currentContainer) {
+      observer.observe(currentContainer);
+    }
+    
+    return () => {
+      if (currentContainer) {
+        observer.unobserve(currentContainer);
+      }
+    };
+  }, [stickers]); // Add stickers as a dependency
 
   const bookVariants: Variants = {
     offscreen: {
@@ -45,26 +80,6 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         ease: "easeOut",
       },
     },
-  };
-
-  const stickerVariants: Variants = {
-    offscreen: {
-      y: 20,
-      opacity: 0,
-      scale: 0.9,
-      rotate: 0,
-    },
-    onscreen: (i: number) => ({
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      rotate: i % 2 === 0 ? 8 : -8, 
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-        delay: 0.7 + (i * 0.08),
-      },
-    }),
   };
 
   return (
@@ -95,46 +110,28 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
               style={{
                 top: sticker.position.top,
                 left: sticker.position.left,
-                zIndex: 10,
+                zIndex: hoveredIndex === index ? 20 : 10,
                 cursor: "none",
               }}
-              variants={stickerVariants}
-              custom={index}
-              initial="offscreen"
-              animate={stickerControls[index]}
-              onViewportEnter={() => {
-                stickerControls[index].start({
-                  y: 0,
-                  opacity: 1,
-                  scale: 1,
-                  rotate: index % 2 === 0 ? 8 : -8,
-                  transition: {
-                    duration: 0.5,
-                    ease: "easeOut",
-                    delay: 0.7 + (index * 0.08),
-                  }
-                });
+              initial={{
+                y: 20,
+                opacity: 0,
+                scale: 0.9,
+                rotate: 0
               }}
-              whileHover={{
-                scale: 1.05,
-                rotate: 0,
-                zIndex: 20,
-                transition: {
-                  duration: 0.1,
-                  ease: "easeOut"
-                }
+              animate={{
+                y: animatedStickers[index] ? 0 : 20,
+                opacity: animatedStickers[index] ? 1 : 0,
+                scale: hoveredIndex === index ? 1.05 : 1,
+                rotate: hoveredIndex === index ? 0 : (index % 2 === 0 ? 8 : -8),
+                zIndex: hoveredIndex === index ? 20 : 10
               }}
-              onHoverEnd={() => {
-                stickerControls[index].start({
-                  scale: 1,
-                  rotate: index % 2 === 0 ? 8 : -8,
-                  zIndex: 10,
-                  transition: {
-                    duration: 0.05,
-                    ease: "easeOut"
-                  }
-                });
+              transition={{
+                duration: hoveredIndex === index ? 0.1 : 0.5,
+                ease: "easeOut"
               }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
             >
               <Image
                 src={sticker.src}
