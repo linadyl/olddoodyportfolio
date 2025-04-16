@@ -1,7 +1,5 @@
-name = "portfolio-site"
-
+# Configuration for Cloudflare Pages
 [build]
 command = "npm run build"
 
-# Simplified structure
-pages_build_output_dir = ".next"
+pages_build_output_dir = "out"
