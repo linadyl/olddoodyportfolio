@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "deploy": "wrangler deploy",
-    "publish": "wrangler publish"
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "deploy": "wrangler deploy"
   },
   "dependencies": {
     "motion": "^12.7.3",

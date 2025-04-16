@@ -2,11 +2,14 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  // Remove swcMinify as it's not recognized in Next.js 15
+  // swcMinify: true,
+  
+  // Required for Cloudflare Pages
   output: 'standalone',
-  experimental: {
-  },
+  
   images: {
+    // Avoid issues with image optimization
     unoptimized: true,
   },
 };
