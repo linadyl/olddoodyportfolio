@@ -67,15 +67,35 @@ const TypewriterText = ({ text }: { text: string }) => {
 export default function Home() {
   const stickers = [
     {
-      id: "projects",
+      id: "brewmatch",
       src: "/stickers/bm.png",
-      alt: "Projects sticker",
-      link: "/projects",
-      title: "my projects",
-      position: { top: "20%", left: "20%" },
-      size: { width: 250, height: 250 },
+      alt: "brewmatch project logo sticker",
+      link: "/brewmatch",
+      title: "brewmatch",
+      position: { top: "18%", left: "17%" },
+      size: { width: 280, height: 280 },
       rotationDeg: 10
     },
+    {
+      id: "quickcatch",
+      src: "/stickers/qc.png",
+      alt: "quickcatch project logo sticker",
+      link: "/quickcatch",
+      title: "quickcatch",
+      position: { top: "25%", left: "55%"},
+      size: { width: 250, height: 250 },
+      rotationDeg: 15
+    },
+    {
+      id: "portfolio",
+      src: "/stickers/site.png",
+      alt: "portfolio site logo sticker",
+      link: "/porfolio",
+      title: "my portfolio!",
+      position: { top: "60%", left: "30%" },
+      size: { width: 250, height: 250 },
+      rotationDeg: 8
+    }
   ];
 
   return (
