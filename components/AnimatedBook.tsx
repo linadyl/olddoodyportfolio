@@ -18,6 +18,7 @@ interface StickerType {
     height: number;
   };
   rotationDeg?: number;
+  role: string;
 }
 
 interface AnimatedBookProps {
@@ -27,13 +28,10 @@ interface AnimatedBookProps {
 
 const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = [] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Use state to track hover and animation states instead of animation controls
   const [animatedStickers, setAnimatedStickers] = useState<boolean[]>(Array(stickers.length).fill(false));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
-  // Handle animation entry
   useEffect(() => {
-    // Create a ref to the current container element
     const currentContainer = containerRef.current;
     
     const observer = new IntersectionObserver(
@@ -63,7 +61,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         observer.unobserve(currentContainer);
       }
     };
-  }, [stickers]); // Add stickers as a dependency
+  }, [stickers]);
 
   const bookVariants: Variants = {
     offscreen: {

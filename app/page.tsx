@@ -74,7 +74,8 @@ export default function Home() {
       title: "brewmatch",
       position: { top: "18%", left: "17%" },
       size: { width: 280, height: 280 },
-      rotationDeg: 10
+      rotationDeg: 10,
+      role: "full-stack"
     },
     {
       id: "quickcatch",
@@ -82,9 +83,10 @@ export default function Home() {
       alt: "quickcatch project logo sticker",
       link: "/quickcatch",
       title: "quickcatch",
-      position: { top: "25%", left: "55%"},
+      position: { top: "20%", left: "60%"},
       size: { width: 250, height: 250 },
-      rotationDeg: 15
+      rotationDeg: 15,
+      role: "full-stack"
     },
     {
       id: "portfolio",
@@ -92,9 +94,21 @@ export default function Home() {
       alt: "portfolio site logo sticker",
       link: "/porfolio",
       title: "my portfolio!",
-      position: { top: "60%", left: "30%" },
+      position: { top: "60%", left: "25%" },
       size: { width: 250, height: 250 },
-      rotationDeg: 8
+      rotationDeg: 8,
+      role: "full-stack"
+    },
+    {
+      id: "handmotion",
+      src: "/stickers/arduino.gif",
+      alt: "gif of hand instrument demo",
+      link: "/arduinoproj",
+      title: "hand instrument",
+      position: { top: "60%", left: "60%" },
+      size: { width: 300, height: 200 },
+      rotationDeg: 10,
+      role: "full-stack"
     }
   ];
 
@@ -123,7 +137,7 @@ export default function Home() {
           className="font-mono text-accent text-center"
         >
           my project book!
-          <div className="mt-2">↓</div>
+          <div className="mt-2 -mb-5">↓</div>
         </motion.div>
       </div>
       
