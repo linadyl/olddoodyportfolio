@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useMotionValue } from "motion/react";
 import Link from "next/link";
@@ -80,6 +80,8 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
 }) => {
   const popupRef = useRef<HTMLDivElement>(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  // quick fix just for now :(((
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(propIsMobile);
   
@@ -130,7 +132,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
   }, []);
   
   // Function to calculate and update popup position
-  const updatePopupPosition = () => {
+  const updatePopupPosition = useCallback(() => {
     if (!isOpen) return;
     
     // Always check current screen width directly
@@ -168,7 +170,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
     // Reset motion values when position changes
     x.set(0);
     y.set(0);
-  };
+  }, [isOpen, stickerEl, x, y]);
 
   // Calculate position when popup opens and handle window resize
   useEffect(() => {
@@ -184,7 +186,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
         window.removeEventListener('resize', updatePopupPosition);
       };
     }
-  }, [isOpen, stickerEl]);
+  }, [isOpen, stickerEl, updatePopupPosition]);
 
   if (!sticker) return null;
   
@@ -296,7 +298,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
             </div>
           )}
           
-          {/* Retro-style popup container with user-select-none to prevent text selection while dragging */}
+          {/* popup container with user-select-none to prevent text selection while dragging */}
           <div 
             className="p-3 sm:p-4 rounded-md shadow-md select-none"
             style={{ 
@@ -341,7 +343,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
                 alt={sticker.alt || sticker.title || sticker.id}
                 fill
                 style={{ objectFit: 'cover' }}
-                className="pointer-events-none" // Prevent image from interfering with drag
+                className="pointer-events-none" 
                 draggable="false" // Explicitly prevent dragging
                 unselectable="on" // Additional prevention for older browsers
               />
