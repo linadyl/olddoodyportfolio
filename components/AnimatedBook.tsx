@@ -286,7 +286,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
         sticker={selectedSticker}
-        position={{ x: 0, y: 0 }} // Not used anymore but kept for interface compatibility
+        position={{ x: 0, y: 0 }} // Not used anymore but kept cuz for compatibility :'(
         stickerEl={activeStickerEl}
         tags={selectedSticker?.tags || []} 
       />
