@@ -314,7 +314,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
           >
             {/* Header with title */}
             <div className="flex justify-between items-center mb-2 sm:mb-3">
-              <div className="text-base sm:text-lg font-bold uppercase">
+              <div className="text-base sm:text-lg font-bold">
                 {sticker.title || sticker.id}
               </div>
               <button 
