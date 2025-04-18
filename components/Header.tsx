@@ -13,6 +13,8 @@ interface NavLinkProps {
 
 const NavLink: React.FC<NavLinkProps> = ({ href, children, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const isExternalLink = href.startsWith('http://') || href.startsWith('https://');
   
   return (
     <div 
@@ -28,12 +30,20 @@ const NavLink: React.FC<NavLinkProps> = ({ href, children, onClick }) => {
           animate={true}
           hoverEffect={true}
         >
-          <Link href={href}>
+          <Link 
+          href={href}
+          target={isExternalLink ? "_blank" : undefined}
+          rel={isExternalLink ? "noopener noreferrer" : undefined}
+          >
             {children}
           </Link>
         </CustomHighlight>
       ) : (
-        <Link href={href}>
+        <Link 
+          href={href}
+          target={isExternalLink ? "_blank" : undefined}
+          rel={isExternalLink ? "noopener noreferrer" : undefined}
+        >
           {children}
         </Link>
       )}
