@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
+import { useCursor } from "./CursorContext";
 
 interface CursorPosition {
   x: number;
@@ -10,6 +13,7 @@ interface CursorPosition {
 const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState<CursorPosition | null>(null);
   const [isHovering, setIsHovering] = useState<boolean>(false);
+  const { hoverColor, isStickerHovered } = useCursor();
 
   const X_OFFSET = 10;
   const Y_OFFSET = 10;
@@ -89,7 +93,7 @@ const CustomCursor: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed pointer-events-none z-50"
+      className="fixed pointer-events-none z-[999]" // Highest z-index to stay on top
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -113,7 +117,10 @@ const CustomCursor: React.FC = () => {
             animate={{ opacity: 0.9, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.08, ease: "easeOut" }}
-            className="bg-hover w-3.5 h-3.5 border border-foreground"
+            className="w-3.5 h-3.5 border border-foreground"
+            style={{ 
+              backgroundColor: isStickerHovered && hoverColor ? hoverColor : '#a3b1ff'
+            }}
           />
         ) : (
           <motion.div

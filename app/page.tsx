@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import CustomCursor from "@/components/cursor";
 import AnimatedBook from "@/components/AnimatedBook";
 import CustomHighlight from "@/components/CustomHighlight";
+import { CursorProvider } from '@/components/CursorContext';
 import { motion, useAnimationControls } from "motion/react";
 import { useEffect, useState } from "react";
 import WigglingAsciiBackground from "@/components/WigglingAsciiBackground";
@@ -65,86 +66,133 @@ const TypewriterText = ({ text }: { text: string }) => {
 };
 
 export default function Home() {
+
   const stickers = [
     {
       id: "brewmatch",
-      src: "/stickers/bm.png",
+      src: "/stickers/brewmatch.png",
+      popupImage: "/projects/brewmatch-proj.png",
       alt: "brewmatch project logo sticker",
       link: "/brewmatch",
       title: "brewmatch",
       position: { top: "18%", left: "17%" },
       size: { width: 280, height: 280 },
       rotationDeg: 10,
-      role: "full-stack"
+      desc: "a personality based cafe locator app!", 
+      popupDesc: "a fully functional mock mobile app built with no frameworks, and features full backend implementation (yay for the fundamentals!). users take a personality quiz, and their results influence the local cafe recommendations!",
+      disableLink: true,
+      buttonText: "case study coming soon...", 
+      popupColor: "#562B15", 
+      textColor: "#ffffff",
+      tags: [
+        { name: "HTML", color: "#EC5D28", textColor: "#ffffff" },
+        { name: "CSS", color: "#1572B6", textColor: "ffffff"},
+        { name: "VanillaJS", color: "#F7DF1E", textColor: "#000000" },
+        { name: "PHP", color: "#777BB3", textColor: "#ffffff" },
+        { name: "SQL", color: "#3397DC", textColor: "#ffffff"}
+      ]  
     },
     {
       id: "quickcatch",
       src: "/stickers/qc.png",
+      popupImage: "/projects/quickcatch-popup.jpg",
       alt: "quickcatch project logo sticker",
-      link: "/quickcatch",
+      link: "https://devpost.com/software/spotlite-8b0lhg",
       title: "quickcatch",
       position: { top: "20%", left: "60%"},
       size: { width: 250, height: 250 },
       rotationDeg: 15,
-      role: "full-stack"
+      desc: "AI powered personalized sports content updator", 
+      popupDesc: "(BearHacks 2025) QuickCatch is an AI-powered sports content aggregator that personalizes updates based on user preferences. It uses machine learning to deliver the most relevant sports news, highlights, and statistics tailored to each user's favorite teams and players.",
+      buttonText: "DEVPOST LINK →", 
+      popupColor: "#F0FFB2",
+      textColor: "#271918",
+      tags: [
+        { name: "AI", color: "#FF5A5F", textColor: "#ffffff" },
+        { name: "Python", color: "#3776AB", textColor: "#ffffff" },
+        { name: "Next.js", color: "#000000", textColor: "#ffffff" }
+      ]
     },
     {
       id: "portfolio",
       src: "/stickers/site.png",
+      popupImage: "/projects/portfolio-img.png",
       alt: "portfolio site logo sticker",
       link: "/porfolio",
       title: "my portfolio!",
       position: { top: "60%", left: "25%" },
       size: { width: 250, height: 250 },
       rotationDeg: 8,
-      role: "full-stack"
+      desc: "my portfolio! :D", 
+      popupDesc: "my portfolio website built from scratch (with lots of moral support from caffeine), and contains a few hand drawn elements here and there. hope u enjoy!!", 
+      buttonText: "you are here! :D", 
+      disableLink: true, 
+      popupColor: "#3f764c", 
+      textColor: "#ffffff",
+      tags: [
+        { name: "Next.js", color: "#000000", textColor: "#ffffff" },
+        { name: "Tailwind", color: "#38B2AC", textColor: "#ffffff" },
+        { name: "TypeScript", color: "#3178C6", textColor: "#ffffff" },
+        { name: "motion.dev", color: "#F0E510", textColor: "#000000"}
+      ]   
     },
     {
       id: "handmotion",
       src: "/stickers/arduino.gif",
       alt: "gif of hand instrument demo",
-      link: "/arduinoproj",
+      link: "https://drive.google.com/file/d/1nAkwEEwkN5K-lEfeXWhmHFzaRQoDNb9u/view?usp=sharing",
       title: "hand instrument",
       position: { top: "60%", left: "60%" },
       size: { width: 300, height: 200 },
       rotationDeg: 10,
-      role: "full-stack"
-    }
+      desc: "my arduino project that turns hand gestures into musical notes ♪♪♪", 
+      popupDesc: "my little interactive project that uses computer vision to track hand movements via a webcam. It detects when finger touches occur (like thumb to index) to trigger MIDI notes, creates visual ribbons that follow hand movements, and uses an Arduino with an ultrasonic sensor to control sustain effects!",
+      buttonText: "DEMO VIDEO →", 
+      popupColor: "#f4e5ff", 
+      textColor: "#271918",
+      tags: [
+        { name: "Arduino", color: "#00979D", textColor: "#ffffff" },
+        { name: "C++", color: "#00599C", textColor: "#ffffff" },
+        { name: "Python", color: "#3271A0", textColor: "#FFE974" }
+      ]  
+    },
   ];
 
   return (
-    <main>
-      <WigglingAsciiBackground />
-      <CustomCursor />
-      <Header />
-      <div className="font-mono p-44 w-3/5 text-[50px] leading-[119.958%] tracking-[-3.5px] text-foreground">
-        ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i&apos;m a <span className="text-3xl -ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
-        <div className="mt-2 text-[25px]">
-          <TypewriterText text="↪ studying interactive media @ sheridan college 🥸" />
+    <CursorProvider>
+      <main>
+        <WigglingAsciiBackground />
+        <CustomCursor />
+        <Header />
+        <div className="font-mono p-44 w-3/5 text-[50px] leading-[119.958%] tracking-[-3.5px] text-foreground">
+          ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i&apos;m a <span className="text-3xl -ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
+          <div className="mt-2 text-[25px]">
+            <TypewriterText text="↪ studying interactive media @ sheridan college 🥸" />
+          </div>
         </div>
-      </div>
-      
-      <div className="flex justify-center mt-13">
-        <motion.div 
-          animate={{ 
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "loop"
-          }}
-          className="font-mono text-accent text-center"
-        >
-          my project book!
-          <div className="mt-2 -mb-5">↓</div>
-        </motion.div>
-      </div>
-      
-      <AnimatedBook 
-        bookImageSrc="/book.png" 
-        stickers={stickers}
-      />
-    </main>
+        
+        <div className="flex justify-center mt-13">
+          <motion.div 
+            animate={{ 
+              y: [0, 10, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatType: "loop"
+            }}
+            className="font-mono text-accent text-center"
+          >
+            my project book!
+            <div className="mt-2 -mb-5">↓</div>
+          </motion.div>
+        </div>
+        
+        <AnimatedBook 
+          bookImageSrc="/book.png" 
+          stickers={stickers}
+        />
+      </main>
+    </CursorProvider>
   );
 }
