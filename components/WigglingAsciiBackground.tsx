@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const WigglingAsciiBackground = ({ asciiArt = null }) => {
+const WigglingAsciiBackground = ({ asciiArt }: { asciiArt?: string }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   
   // Default placeholder ASCII art inside the component

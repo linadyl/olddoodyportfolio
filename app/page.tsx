@@ -116,7 +116,7 @@ export default function Home() {
     {
       id: "portfolio",
       src: "/stickers/site.png",
-      popupImage: "/projects/portfolio-img.png",
+      popupImage: "/projects/portfolio.gif",
       alt: "portfolio site logo sticker",
       link: "/porfolio",
       title: "my portfolio!",
