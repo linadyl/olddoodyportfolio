@@ -154,7 +154,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
     },
   };
 
-  const handleStickerClick = (sticker: StickerType, index: number) => {
+  const handleStickerClick = (sticker: StickerType) => {
     // Store the sticker element for positioning
     const stickerElement = document.getElementById(`sticker-${sticker.id}`);
     
@@ -192,7 +192,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
             className="w-full"
           />
           
-          {stickers.map((sticker, index) => (
+          {stickers.map((sticker, idx) => (
             <motion.div
               key={sticker.id}
               id={`sticker-${sticker.id}`}
@@ -200,7 +200,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
               style={{
                 top: sticker.position.top,
                 left: sticker.position.left,
-                zIndex: hoveredIndex === index ? 20 : 10,
+                zIndex: hoveredIndex === idx ? 20 : 10,
                 cursor: "none",
               }}
               initial={{
@@ -210,19 +210,19 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
                 rotate: 0
               }}
               animate={{
-                y: animatedStickers[index] ? 0 : 20,
-                opacity: animatedStickers[index] ? 1 : 0,
-                scale: hoveredIndex === index ? 1.05 : 1,
-                rotate: hoveredIndex === index ? 0 : (sticker.rotationDeg || (index % 2 === 0 ? 8 : -8)),
-                zIndex: hoveredIndex === index ? 20 : 10
+                y: animatedStickers[idx] ? 0 : 20,
+                opacity: animatedStickers[idx] ? 1 : 0,
+                scale: hoveredIndex === idx ? 1.05 : 1,
+                rotate: hoveredIndex === idx ? 0 : (sticker.rotationDeg || (idx % 2 === 0 ? 8 : -8)),
+                zIndex: hoveredIndex === idx ? 20 : 10
               }}
               transition={{
-                duration: hoveredIndex === index ? 0.1 : 0.5,
+                duration: hoveredIndex === idx ? 0.1 : 0.5,
                 ease: "easeOut"
               }}
-              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseEnter={() => setHoveredIndex(idx)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => handleStickerClick(sticker, index)}
+              onClick={() => handleStickerClick(sticker)}
             >
               <Image
                 src={sticker.src}
@@ -286,7 +286,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
         sticker={selectedSticker}
-        position={{ x: 0, y: 0 }} // Not used anymore but kept cuz for compatibility :(
+        position={{ x: 0, y: 0 }} // Not used anymore but kept for interface compatibility
         stickerEl={activeStickerEl}
         tags={selectedSticker?.tags || []} 
       />
