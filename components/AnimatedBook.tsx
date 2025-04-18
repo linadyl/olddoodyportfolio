@@ -51,6 +51,13 @@ interface StickerType {
   }>;
 }
 
+// Interface for tracking open popups
+interface OpenPopup {
+  sticker: StickerType;
+  stickerEl: HTMLElement;
+  zIndex: number;
+}
+
 interface AnimatedBookProps {
   bookImageSrc: string;
   stickers?: StickerType[];
@@ -89,7 +96,11 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
   const [isMobile, setIsMobile] = useState(false);
   const [isMediumDesktop, setIsMediumDesktop] = useState(false);
   
-  // New states for popup
+  // New state for multiple popups
+  const [openPopups, setOpenPopups] = useState<OpenPopup[]>([]);
+  const [nextZIndex, setNextZIndex] = useState(100); // Starting z-index
+  
+  // For single popup on mobile (existing behavior)
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedSticker, setSelectedSticker] = useState<StickerType | null>(null);
   const [activeStickerEl, setActiveStickerEl] = useState<HTMLElement | null>(null);
@@ -190,18 +201,68 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
     },
   };
 
+  // Handle sticker click - now with support for multiple popups on desktop
   const handleStickerClick = (sticker: StickerType) => {
     // Store the sticker element for positioning
     const stickerElement = document.getElementById(`sticker-${sticker.id}`);
     
-    if (stickerElement) {
+    if (!stickerElement) return;
+    
+    if (isMobile) {
+      // Mobile behavior - single popup
       setActiveStickerEl(stickerElement);
       setSelectedSticker(sticker);
       setIsPopupOpen(true);
+    } else {
+      // Desktop behavior - multiple popups
+      // Check if this popup is already open
+      const existingPopupIndex = openPopups.findIndex(popup => popup.sticker.id === sticker.id);
+      
+      if (existingPopupIndex !== -1) {
+        // If already open, bring it to the front
+        bringPopupToFront(sticker.id);
+      } else {
+        // If not open, add it to the openPopups array with the next z-index
+        setOpenPopups(prev => [
+          ...prev,
+          {
+            sticker,
+            stickerEl: stickerElement,
+            zIndex: nextZIndex
+          }
+        ]);
+        setNextZIndex(prev => prev + 1);
+      }
     }
   };
 
-  const handleClosePopup = () => {
+  // Function to bring a popup to the front by updating its z-index
+  const bringPopupToFront = (stickerId: string) => {
+    setOpenPopups(prev => {
+      // Find the popup to update
+      const newPopups = [...prev];
+      const popupIndex = newPopups.findIndex(popup => popup.sticker.id === stickerId);
+      
+      if (popupIndex === -1) return prev;
+      
+      // Update its z-index to be the highest
+      newPopups[popupIndex] = {
+        ...newPopups[popupIndex],
+        zIndex: nextZIndex
+      };
+      
+      setNextZIndex(nextZIndex + 1);
+      return newPopups;
+    });
+  };
+
+  // Close a specific popup (for desktop)
+  const handleClosePopup = (stickerId: string) => {
+    setOpenPopups(prev => prev.filter(popup => popup.sticker.id !== stickerId));
+  };
+
+  // Close the single popup (for mobile)
+  const handleCloseMobilePopup = () => {
     setIsPopupOpen(false);
     setSelectedSticker(null);
     setActiveStickerEl(null);
@@ -298,7 +359,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
           })}
           
           {/* Tooltip that follows cursor when hovering a sticker - hide on mobile */}
-          {!isMobile && hoveredIndex !== null && !isPopupOpen && (
+          {!isMobile && hoveredIndex !== null && (
             <motion.div
               className="fixed pointer-events-none z-50 rounded-md font-mono text-sm"
               style={{
@@ -344,16 +405,34 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         </motion.div>
       </motion.div>
 
-      {/* Popup component */}
-      <StickerPopup 
-        isOpen={isPopupOpen}
-        onClose={handleClosePopup}
-        sticker={selectedSticker}
-        position={{ x: 0, y: 0 }}
-        stickerEl={activeStickerEl}
-        tags={selectedSticker?.tags || []}
-        isMobile={isMobile}
-      />
+      {/* Mobile - Single Popup component */}
+      {isMobile && (
+        <StickerPopup 
+          isOpen={isPopupOpen}
+          onClose={handleCloseMobilePopup}
+          sticker={selectedSticker}
+          position={{ x: 0, y: 0 }}
+          stickerEl={activeStickerEl}
+          tags={selectedSticker?.tags || []}
+          isMobile={isMobile}
+        />
+      )}
+      
+      {/* Desktop - Multiple Popup components */}
+      {!isMobile && openPopups.map(popup => (
+        <StickerPopup
+          key={popup.sticker.id}
+          isOpen={true}
+          onClose={() => handleClosePopup(popup.sticker.id)}
+          sticker={popup.sticker}
+          position={{ x: 0, y: 0 }}
+          stickerEl={popup.stickerEl}
+          tags={popup.sticker.tags || []}
+          isMobile={isMobile}
+          zIndex={popup.zIndex}
+          onInteraction={() => bringPopupToFront(popup.sticker.id)}
+        />
+      ))}
     </div>
   );
 };
