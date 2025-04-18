@@ -4,7 +4,7 @@ import CustomCursor from "@/components/cursor";
 import CustomHighlight from "@/components/CustomHighlight";
 import { CursorProvider } from '@/components/CursorContext';
 import { motion } from "motion/react";
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import WigglingAsciiBackground from "@/components/WigglingAsciiBackground";
 import Image from "next/image";
 import BookContent from "@/components/BookContent";
