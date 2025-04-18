@@ -13,20 +13,46 @@ interface CursorPosition {
 const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState<CursorPosition | null>(null);
   const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(true); // Default to true to prevent cursor flash on mobile
   const { hoverColor, isStickerHovered } = useCursor();
 
   const X_OFFSET = 10;
   const Y_OFFSET = 10;
 
+  // Check if we're on mobile
   useEffect(() => {
+    const checkMobile = () => {
+      // Use a combination of checks for mobile devices
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 768;
+      setIsMobile(isTouchDevice || isSmallScreen);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    // Skip all cursor logic on mobile
+    if (isMobile) return;
+    
     const updateInitialPosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", updateInitialPosition, { once: true });
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
+    // Skip all cursor logic on mobile
+    if (isMobile) return;
+    
     const updateCursorPosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
@@ -77,17 +103,21 @@ const CustomCursor: React.FC = () => {
       document.removeEventListener("mouseover", handleMouseOver as EventListener);
       document.removeEventListener("mouseout", handleMouseOut as EventListener);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
-    document.body.style.cursor = "none";
-    
-    return () => {
-      document.body.style.cursor = "auto";
-    };
-  }, []);
+    // Only modify cursor styles on non-mobile devices
+    if (!isMobile) {
+      document.body.style.cursor = "none";
+      
+      return () => {
+        document.body.style.cursor = "auto";
+      };
+    }
+  }, [isMobile]);
 
-  if (!position) {
+  // Don't render custom cursor on mobile
+  if (isMobile || !position) {
     return null;
   }
 

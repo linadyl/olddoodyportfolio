@@ -16,7 +16,23 @@ interface StickerType {
     top: string;
     left: string;
   };
+  mobilePosition?: {
+    top: string;
+    left: string;
+  };
+  mediumPosition?: {
+    top: string;
+    left: string;
+  };
   size: {
+    width: number;
+    height: number;
+  };
+  mobileSize?: {
+    width: number;
+    height: number;
+  };
+  mediumSize?: {
     width: number;
     height: number;
   };
@@ -70,11 +86,31 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { setHoverColor, setIsStickerHovered } = useCursor();
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMediumDesktop, setIsMediumDesktop] = useState(false);
   
   // New states for popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedSticker, setSelectedSticker] = useState<StickerType | null>(null);
   const [activeStickerEl, setActiveStickerEl] = useState<HTMLElement | null>(null);
+  
+  // Check for device/screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsMediumDesktop(width >= 768 && width < 1200); // Medium desktop range
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   
   // Track mouse position
   useEffect(() => {
@@ -171,8 +207,30 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
     setActiveStickerEl(null);
   };
 
+  // Helper function to get the appropriate sticker position based on device
+  const getStickerPosition = (sticker: StickerType) => {
+    if (isMobile && sticker.mobilePosition) {
+      return sticker.mobilePosition;
+    }
+    if (!isMobile && isMediumDesktop && sticker.mediumPosition) {
+      return sticker.mediumPosition;
+    }
+    return sticker.position;
+  };
+
+  // Helper function to get the appropriate sticker size based on device
+  const getStickerSize = (sticker: StickerType) => {
+    if (isMobile && sticker.mobileSize) {
+      return sticker.mobileSize;
+    }
+    if (!isMobile && isMediumDesktop && sticker.mediumSize) {
+      return sticker.mediumSize;
+    }
+    return sticker.size;
+  };
+
   return (
-    <div className="w-full py-32 overflow-hidden relative" ref={containerRef}>
+    <div className="w-full py-12 sm:py-20 md:py-32 overflow-hidden relative" ref={containerRef}>
       <motion.div
         className="relative flex justify-center items-center"
         initial="offscreen"
@@ -192,50 +250,55 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
             className="w-full"
           />
           
-          {stickers.map((sticker, idx) => (
-            <motion.div
-              key={sticker.id}
-              id={`sticker-${sticker.id}`}
-              className="absolute cursor-pointer"
-              style={{
-                top: sticker.position.top,
-                left: sticker.position.left,
-                zIndex: hoveredIndex === idx ? 20 : 10,
-                cursor: "none",
-              }}
-              initial={{
-                y: 20,
-                opacity: 0,
-                scale: 0.9,
-                rotate: 0
-              }}
-              animate={{
-                y: animatedStickers[idx] ? 0 : 20,
-                opacity: animatedStickers[idx] ? 1 : 0,
-                scale: hoveredIndex === idx ? 1.05 : 1,
-                rotate: hoveredIndex === idx ? 0 : (sticker.rotationDeg || (idx % 2 === 0 ? 8 : -8)),
-                zIndex: hoveredIndex === idx ? 20 : 10
-              }}
-              transition={{
-                duration: hoveredIndex === idx ? 0.1 : 0.5,
-                ease: "easeOut"
-              }}
-              onMouseEnter={() => setHoveredIndex(idx)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => handleStickerClick(sticker)}
-            >
-              <Image
-                src={sticker.src}
-                alt={sticker.alt}
-                width={sticker.size.width}
-                height={sticker.size.height}
-                className="drop-shadow-md"
-              />
-            </motion.div>
-          ))}
+          {stickers.map((sticker, idx) => {
+            const position = getStickerPosition(sticker);
+            const size = getStickerSize(sticker);
+            
+            return (
+              <motion.div
+                key={sticker.id}
+                id={`sticker-${sticker.id}`}
+                className="absolute cursor-pointer"
+                style={{
+                  top: position.top,
+                  left: position.left,
+                  zIndex: hoveredIndex === idx ? 20 : 10,
+                  cursor: "none",
+                }}
+                initial={{
+                  y: 20,
+                  opacity: 0,
+                  scale: 0.9,
+                  rotate: 0
+                }}
+                animate={{
+                  y: animatedStickers[idx] ? 0 : 20,
+                  opacity: animatedStickers[idx] ? 1 : 0,
+                  scale: hoveredIndex === idx ? 1.05 : 1,
+                  rotate: hoveredIndex === idx ? 0 : (sticker.rotationDeg || (idx % 2 === 0 ? 8 : -8)),
+                  zIndex: hoveredIndex === idx ? 20 : 10
+                }}
+                transition={{
+                  duration: hoveredIndex === idx ? 0.1 : 0.5,
+                  ease: "easeOut"
+                }}
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => handleStickerClick(sticker)}
+              >
+                <Image
+                  src={sticker.src}
+                  alt={sticker.alt}
+                  width={size.width}
+                  height={size.height}
+                  className="drop-shadow-md"
+                />
+              </motion.div>
+            );
+          })}
           
-          {/* Tooltip that follows cursor when hovering a sticker */}
-          {hoveredIndex !== null && !isPopupOpen && (
+          {/* Tooltip that follows cursor when hovering a sticker - hide on mobile */}
+          {!isMobile && hoveredIndex !== null && !isPopupOpen && (
             <motion.div
               className="fixed pointer-events-none z-50 rounded-md font-mono text-sm"
               style={{
@@ -258,7 +321,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
               </div>
               
               {/* Tags section below description */}
-                              {stickers[hoveredIndex].tags && stickers[hoveredIndex].tags.length > 0 && (
+              {stickers[hoveredIndex].tags && stickers[hoveredIndex].tags.length > 0 && (
                 <div 
                   className="flex flex-wrap gap-1 p-2 mt-1"
                   style={{ 
@@ -286,9 +349,10 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
         sticker={selectedSticker}
-        position={{ x: 0, y: 0 }} // Not used anymore but kept for interface compatibility
+        position={{ x: 0, y: 0 }}
         stickerEl={activeStickerEl}
-        tags={selectedSticker?.tags || []} 
+        tags={selectedSticker?.tags || []}
+        isMobile={isMobile}
       />
     </div>
   );

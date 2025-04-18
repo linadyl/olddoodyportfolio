@@ -8,11 +8,18 @@ interface ContactFormProps {
   onSubmit?: (data: { name: string; email: string; message: string }) => void;
   onOpenChange?: (isOpen: boolean) => void;
   onHoverChange?: (isHovered: boolean) => void;
+  isMobileOverride?: boolean; // Add the missing prop
 }
 
-const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onOpenChange, onHoverChange }) => {
+const ContactForm: React.FC<ContactFormProps> = ({ 
+  onSubmit, 
+  onOpenChange, 
+  onHoverChange,
+  isMobileOverride 
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +27,22 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onOpenChange, onHov
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(isMobileOverride !== undefined ? isMobileOverride : window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [isMobileOverride]);
 
   // Notify parent component when open state changes
   useEffect(() => {
@@ -89,7 +112,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onOpenChange, onHov
         onClick={handleToggle}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="font-mono inline-block px-8 py-3 text-white bg-accent border-2 border-foreground rounded-md"
+        className="font-mono inline-block px-4 sm:px-8 py-2 sm:py-3 text-white bg-accent border-2 border-foreground rounded-md text-sm sm:text-base"
         style={{ 
           boxShadow: '3px 3px 0 var(--foreground)',
           cursor: 'none'
@@ -97,12 +120,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onOpenChange, onHov
         whileHover={{ scale: 1.05 }}
         transition={{ type: "spring", stiffness: 400, damping: 10 }}
       >
-        <span className="text-lg">contact me!</span>
+        <span className="text-base sm:text-lg">contact me!</span>
       </motion.button>
 
-      {/* Form Popup */}
+      {/* Form Popup - fixed positioning for mobile */}
       <motion.div
-        className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 w-80 bg-background border-2 border-foreground rounded-md overflow-hidden z-[50]"
+        className={`absolute ${isMobile ? '-left-16 bottom-[50px]' : 'left-1/2 -translate-x-1/2 bottom-full mb-4'} w-[280px] sm:w-80 bg-background border-2 border-foreground rounded-md overflow-hidden z-[50]`}
         initial={{ opacity: 0, y: 20, height: 0 }}
         animate={{ 
           opacity: isOpen ? 1 : 0, 
