@@ -45,16 +45,16 @@ export default function About() {
                   
                   <div className="space-y-6 pr-8">
                     <p className="text-lg">
-                        Hi again! i'm <span className='text-accent'>Lina</span>, a full stack developer with a computer science background thats passionate about making <span className='text-accent'>playful</span> and <span className='text-accent'>inclusive</span> digital spaces!
+                        Hi again! i&apos;m <span className='text-accent'>Lina</span>, a full stack developer with a computer science background thats passionate about making <span className='text-accent'>playful</span> and <span className='text-accent'>inclusive</span> digital spaces!
                     </p>
                     <p className="text-lg">
-                        Currently studying Interactive Media Management at Sheridan College, where I'm learning to bridge the gap between design and development and hone my UX design + research skills...
+                        Currently studying Interactive Media Management at Sheridan College, where I&apos;m learning to bridge the gap between design and development and hone my UX design + research skills...
                     </p>
                   </div>
                   <div className="space-y-6 pl-8">
                     <div>
-                      <h3 className="text-2xl mb-2 text-foreground"><CustomHighlight color="#3f764c">when I'm not coding</CustomHighlight></h3>
-                      <p className='text-lg'>you'll find me...</p>
+                      <h3 className="text-2xl mb-2 text-foreground"><CustomHighlight color="#3f764c">when I&apos;m not coding</CustomHighlight></h3>
+                      <p className='text-lg'>you&apos;ll find me...</p>
                       <p className="text-lg">
                         frolicking Toronto, caffeinated beverage in hand OR consuming media in every form (books, film, tv, games, the list goes on...), or playing guitar!
                       </p>
