@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/linalee/Documents/olddoodyportfolio/app/layout\":[\"static/media/4489c60a5712b87e-s.p.woff2\",\"static/media/3d9ea938b6afa941-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
