@@ -47,12 +47,13 @@ interface StickerPopupProps {
   position: { x: number; y: number };
   stickerEl?: HTMLElement | null;
   tags?: TagProps[];
+  isMobile?: boolean;
 }
 
 const Tag: React.FC<TagProps> = ({ name, color = "#d4d4d4", textColor = "#271918" }) => {
   return (
     <div 
-      className="px-3 py-1 rounded-full text-xs font-mono inline-flex items-center justify-center"
+      className="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-mono inline-flex items-center justify-center"
       style={{ 
         backgroundColor: color,
         color: textColor,
@@ -70,7 +71,8 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
   onClose, 
   sticker, 
   stickerEl,
-  tags = []
+  tags = [],
+  isMobile = false
 }) => {
   const popupRef = useRef<HTMLDivElement>(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
@@ -92,30 +94,39 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
     };
   }, [isOpen, onClose]);
 
-  // Calculate position directly above the sticker element
+  // Calculate position based on whether mobile or desktop
   useEffect(() => {
-    if (stickerEl && isOpen) {
-      const stickerRect = stickerEl.getBoundingClientRect();
-      const popupWidth = 380; // Approximate width
-      
-      // Center horizontally over the sticker
-      const left = stickerRect.left + (stickerRect.width / 2) - (popupWidth / 2);
-      
-      // Position above the sticker
-      const top = stickerRect.top - 450; // Place 450px above the top of sticker
-      
-      // Handle case where popup would go off the top of the screen
-      const finalTop = top < 20 ? 20 : top;
-      
-      // Handle case where popup would go off the sides
-      const finalLeft = Math.max(20, Math.min(left, window.innerWidth - popupWidth - 20));
-      
-      setPopupPosition({ 
-        top: finalTop, 
-        left: finalLeft 
-      });
+    if (isOpen) {
+      if (isMobile) {
+        // For mobile, position in the center of the viewport at a fixed position
+        setPopupPosition({
+          top: window.innerHeight * 0.15, // Position at 15% from the top
+          left: (window.innerWidth - 280) / 2  // Center horizontally (assuming 280px width)
+        });
+      } else if (stickerEl) {
+        // For desktop, position near the sticker
+        const stickerRect = stickerEl.getBoundingClientRect();
+        const popupWidth = 380;
+        
+        // Center horizontally over the sticker
+        const left = stickerRect.left + (stickerRect.width / 2) - (popupWidth / 2);
+        
+        // Position above the sticker
+        const top = stickerRect.top - 450; // Place 450px above the top of sticker
+        
+        // Handle case where popup would go off the top of the screen
+        const finalTop = top < 20 ? 20 : top;
+        
+        // Handle case where popup would go off the sides
+        const finalLeft = Math.max(20, Math.min(left, window.innerWidth - popupWidth - 20));
+        
+        setPopupPosition({ 
+          top: finalTop, 
+          left: finalLeft 
+        });
+      }
     }
-  }, [isOpen, stickerEl]);
+  }, [isOpen, stickerEl, isMobile]);
 
   if (!sticker) return null;
   
@@ -140,7 +151,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
       border: `2px outset ${textColor}`
     };
     
-    const className = "py-2 px-4 text-center text-sm cursor-pointer";
+    const className = "py-2 px-4 text-center text-xs sm:text-sm cursor-pointer";
     
     // If link is disabled, render a div instead
     if (sticker.disableLink) {
@@ -180,7 +191,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
       {isOpen && (
         <motion.div
           ref={popupRef}
-          className="fixed z-[100] w-96 font-mono"
+          className={`fixed z-[100] w-[280px] sm:w-[380px] font-mono ${isMobile ? 'max-h-[70vh] overflow-y-auto' : ''}`}
           style={{
             top: `${popupPosition.top}px`,
             left: `${popupPosition.left}px`,
@@ -192,7 +203,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
         >
           {/* Retro-style popup container */}
           <div 
-            className="p-4 rounded-md shadow-md"
+            className="p-3 sm:p-4 rounded-md shadow-md"
             style={{ 
               backgroundColor: backgroundColor,
               color: textColor,
@@ -202,8 +213,8 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
             }}
           >
             {/* Close button */}
-            <div className="flex justify-between items-center mb-3">
-              <div className="text-lg font-bold uppercase">
+            <div className="flex justify-between items-center mb-2 sm:mb-3">
+              <div className="text-base sm:text-lg font-bold uppercase">
                 {sticker.title || sticker.id}
               </div>
               <button 
@@ -221,7 +232,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
             
             {/* Project image */}
             <div 
-              className="w-full h-48 mb-3 relative bg-gray-200 flex items-center justify-center overflow-hidden"
+              className="w-full h-28 sm:h-48 mb-2 sm:mb-3 relative bg-gray-200 flex items-center justify-center overflow-hidden"
               style={{ border: `2px solid ${textColor}` }}
             >
               <Image
@@ -233,7 +244,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
             </div>
             
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3">
               {tags.map((tag, index) => (
                 <Tag 
                   key={index} 
@@ -246,7 +257,7 @@ const StickerPopup: React.FC<StickerPopupProps> = ({
             
             {/* Description */}
             <div 
-              className="mb-4 text-sm"
+              className="mb-3 sm:mb-4 text-xs sm:text-sm"
               style={{ 
                 backgroundColor: 'rgba(255, 255, 255, 0.4)', 
                 border: `1px solid ${textColor}`,

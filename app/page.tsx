@@ -66,6 +66,23 @@ const TypewriterText = ({ text }: { text: string }) => {
 };
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const stickers = [
     {
@@ -76,7 +93,13 @@ export default function Home() {
       link: "/brewmatch",
       title: "brewmatch",
       position: { top: "18%", left: "17%" },
+      mobilePosition: { top: "15%", left: "15%" },
+      // Add medium desktop position
+      mediumPosition: { top: "17%", left: "17%" },
       size: { width: 280, height: 280 },
+      mobileSize: { width: 100, height: 100 },
+      // Add medium desktop size
+      mediumSize: { width: 180, height: 180 },
       rotationDeg: 10,
       desc: "a personality based cafe locator app!", 
       popupDesc: "a fully functional mock mobile app built with no frameworks, and features full backend implementation (yay for the fundamentals!). users take a personality quiz, and their results influence the local cafe recommendations!",
@@ -100,7 +123,13 @@ export default function Home() {
       link: "https://devpost.com/software/spotlite-8b0lhg",
       title: "quickcatch",
       position: { top: "20%", left: "60%"},
+      mobilePosition: { top: "15%", left: "60%" },
+      // Add medium desktop position
+      mediumPosition: { top: "18%", left: "60%" },
       size: { width: 250, height: 250 },
+      mobileSize: { width: 90, height: 90 },
+      // Add medium desktop size
+      mediumSize: { width: 160, height: 160 },
       rotationDeg: 15,
       desc: "AI powered personalized sports content updator", 
       popupDesc: "(BearHacks 2025) QuickCatch is an AI-powered sports content aggregator that personalizes updates based on user preferences. It uses machine learning to deliver the most relevant sports news, highlights, and statistics tailored to each user's favorite teams and players.",
@@ -121,7 +150,13 @@ export default function Home() {
       link: "/porfolio",
       title: "my portfolio!",
       position: { top: "60%", left: "25%" },
+      mobilePosition: { top: "55%", left: "20%" },
+      // Add medium desktop position
+      mediumPosition: { top: "58%", left: "23%" },
       size: { width: 250, height: 250 },
+      mobileSize: { width: 90, height: 90 },
+      // Add medium desktop size
+      mediumSize: { width: 150, height: 150 },
       rotationDeg: 8,
       desc: "my portfolio! :D", 
       popupDesc: "my portfolio website built from scratch (with lots of moral support from caffeine), and contains a few hand drawn elements here and there. hope u enjoy!!", 
@@ -143,7 +178,13 @@ export default function Home() {
       link: "https://drive.google.com/file/d/1nAkwEEwkN5K-lEfeXWhmHFzaRQoDNb9u/view?usp=sharing",
       title: "hand instrument",
       position: { top: "60%", left: "60%" },
+      mobilePosition: { top: "55%", left: "60%" },
+      // Add medium desktop position
+      mediumPosition: { top: "58%", left: "58%" },
       size: { width: 300, height: 200 },
+      mobileSize: { width: 110, height: 75 },
+      // Add medium desktop size
+      mediumSize: { width: 180, height: 120 },
       rotationDeg: 10,
       desc: "my arduino project that turns hand gestures into musical notes ♪♪♪", 
       popupDesc: "my little interactive project that uses computer vision to track hand movements via a webcam. It detects when finger touches occur (like thumb to index) to trigger MIDI notes, creates visual ribbons that follow hand movements, and uses an Arduino with an ultrasonic sensor to control sustain effects!",
@@ -160,18 +201,21 @@ export default function Home() {
 
   return (
     <CursorProvider>
-      <main>
+      <main className="overflow-x-hidden min-h-screen flex flex-col">
         <WigglingAsciiBackground />
         <CustomCursor />
         <Header />
-        <div className="font-mono p-44 w-3/5 text-[50px] leading-[119.958%] tracking-[-3.5px] text-foreground">
-          ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i&apos;m a <span className="text-3xl -ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
-          <div className="mt-2 text-[25px]">
+        
+        {/* Significantly increased padding on top for mobile */}
+        <div className="font-mono p-6 pt-28 sm:pt-32 md:pt-36 sm:p-10 md:p-16 lg:p-24 xl:p-44 w-full sm:w-4/5 lg:w-3/5 text-[20px] sm:text-[28px] md:text-[35px] lg:text-[50px] leading-tight sm:leading-[119.958%] tracking-[-0.5px] sm:tracking-[-1px] md:tracking-[-2px] lg:tracking-[-3.5px] text-foreground">
+          ʕ•ᴥ•ʔ&lt; hi! my name is <span className="text-accent"><CustomHighlight>lina</CustomHighlight></span> and i&apos;m a <span className="text-xs sm:text-xl md:text-2xl lg:text-3xl -ml-1 sm:-ml-2 md:-ml-3 lg:-ml-5">(n aspiring)</span> <span className="text-accent">design engineer</span> based in toronto
+          <div className="mt-2 text-xs sm:text-sm md:text-lg lg:text-[25px]">
             <TypewriterText text="↪ studying interactive media @ sheridan college 🥸" />
           </div>
         </div>
         
-        <div className="flex justify-center mt-13">
+        {/* Pushed "my project book" text near bottom of viewport on mobile */}
+        <div className={`flex justify-center mt-auto ${isMobile ? 'mb-6' : 'mt-6 md:mt-8 lg:mt-13'}`}>
           <motion.div 
             animate={{ 
               y: [0, 10, 0],
@@ -181,7 +225,7 @@ export default function Home() {
               repeat: Infinity,
               repeatType: "loop"
             }}
-            className="font-mono text-accent text-center"
+            className="font-mono text-accent text-center text-sm sm:text-base md:text-lg"
           >
             my project book!
             <div className="mt-2 -mb-5">↓</div>
