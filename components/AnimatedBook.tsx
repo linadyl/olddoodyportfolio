@@ -258,7 +258,7 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
               </div>
               
               {/* Tags section below description */}
-              {stickers[hoveredIndex].tags && stickers[hoveredIndex].tags.length > 0 && (
+                              {stickers[hoveredIndex].tags && stickers[hoveredIndex].tags.length > 0 && (
                 <div 
                   className="flex flex-wrap gap-1 p-2 mt-1"
                   style={{ 
@@ -266,9 +266,9 @@ const AnimatedBook: React.FC<AnimatedBookProps> = ({ bookImageSrc, stickers = []
                     backgroundColor: 'rgba(255, 255, 255, 0.2)'
                   }}
                 >
-                  {stickers[hoveredIndex].tags.map((tag, tagIndex) => (
+                  {stickers[hoveredIndex].tags.map((tag, i) => (
                     <TooltipTag 
-                      key={tagIndex} 
+                      key={i} 
                       name={tag.name} 
                       color={tag.color}
                       textColor={tag.textColor}
