@@ -137,7 +137,7 @@ const Header = () => {
       {/* Mobile menu button - smaller and accent colored */}
       <div className="fixed top-4 right-4 z-30 md:hidden">
         <button 
-          className="p-1.5 rounded-md bg-transparent"
+          className="p-1.5 rounded-md bg-background"
           onClick={toggleMobileMenu}
           style={{ cursor: 'none' }}
         >
@@ -157,7 +157,7 @@ const Header = () => {
       
       {/* Mobile menu */}
       <motion.div 
-        className="fixed top-0 right-0 h-screen bg-background/95 border-l border-foreground/20 z-20 md:hidden overflow-y-auto"
+        className="fixed top-0 right-0 h-screen bg-background border-l border-foreground/20 z-20 md:hidden overflow-y-auto"
         initial={{ x: '100%' }}
         animate={{ x: isMobileMenuOpen ? 0 : '100%' }}
         transition={{ duration: 0.3 }}
